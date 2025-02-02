@@ -7,8 +7,13 @@ services:
     restart: always
     expose:
       - "8080"
-    env_file:
-      - .env.task_manager
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=taskmanager_db
+      - DATABASE_URL=postgresql://user:password@db/taskmanager_db
+    depends_on:
+      - db
     command: ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:8080 app.run:app"]
 
   nginx:
