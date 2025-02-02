@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+pip-log.txt
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+test/
+tests/
+
+# Development
+.git/
+.gitignore
+*.log
+*.tmp
+*.swp
+.env
+*.env
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Database
+*.sqlite3
+*.db
+
+# System
+.DS_Store
+Thumbs.db
+
+# Documentation
+docs/
+*.md
+README*
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore

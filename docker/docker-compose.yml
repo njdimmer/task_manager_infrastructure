@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  taskmanager:
+    build: .
+    container_name: taskmanager
+    restart: always
+    expose:
+      - "8080"
+    env_file:
+      - .env.task_manager
+    depends_on:
+      - db
+    command: ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:8080 app.run:app"]
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    restart: always
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - taskmanager
+
+  db:
+    image: postgres:13
+    container_name: taskmanager_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
