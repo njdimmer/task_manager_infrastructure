@@ -7,11 +7,6 @@ services:
     restart: always
     expose:
       - "8080"
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=taskmanager_db
-      - DATABASE_URL=postgresql://user:password@db/taskmanager_db
     depends_on:
       - db
     command: ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:8080 app.run:app"]
@@ -31,9 +26,10 @@ services:
     image: postgres:13
     container_name: taskmanager_db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taskmanager_db
+      DATABASE_URL: postgresql://user:password@db/taskmanager_db
     ports:
       - "5432:5432"
     volumes:
