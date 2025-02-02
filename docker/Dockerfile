@@ -7,6 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN pip install --upgrade pip
 
+RUN echo "Current working directory: $(pwd)" && ls -alh
+
 COPY ../../requirements.txt .
 RUN pip install -r requirements.txt
 
