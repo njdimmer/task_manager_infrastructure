@@ -8,8 +8,7 @@ services:
     expose:
       - "8080"
     env_file:
-      - ./docker/.env.task_manager
-    depends_on:
+      - ./infrastructure/.env
       - db
     command: ["sh", "-c", "flask db upgrade && gunicorn --bind 0.0.0.0:8080 app.run:app"]
 
