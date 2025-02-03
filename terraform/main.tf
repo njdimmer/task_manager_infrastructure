@@ -85,10 +85,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "taskmanager-vm"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
-  size                = "Standard_B2s"
+  size                = "Standard_B2ms_v2"
 
-  admin_username = "azureuser"
-  admin_password = "P@ssw0rd1234!"
+  admin_username = var.admin_username
+  admin_password = var.admin_password
 
   network_interface_ids = [azurerm_network_interface.nic.id]
 
@@ -102,6 +102,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
     offer     = "UbuntuServer"
     sku       = "18.04-LTS"
     version   = "latest"
+  }
+
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = var.ssh_public_key
   }
 
   custom_data = filebase64("${path.module}/scripts/setup.sh")
