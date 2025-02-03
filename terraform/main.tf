@@ -39,8 +39,8 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix       = "*"
-    destination_address_prefix  = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 
   security_rule {
@@ -60,7 +60,8 @@ resource "azurerm_public_ip" "public_ip" {
   name                = "taskmanager-pip"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -87,13 +88,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
   resource_group_name = azurerm_resource_group.rg.name
   size                = "Standard_B2s"
 
-  network_interface_ids = [azurerm_network_interface.nic.id]
-
   admin_username = "azureuser"
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = var.ssh_public_key
-  }
+  admin_password = "P@ssw0rd1234!"
+
+  network_interface_ids = [azurerm_network_interface.nic.id]
 
   os_disk {
     caching              = "ReadWrite"
@@ -102,10 +100,12 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   source_image_reference {
     publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
+
+  custom_data = filebase64("${path.module}/scripts/setup.sh")
 }
 
 resource "null_resource" "deploy" {
@@ -137,10 +137,6 @@ resource "null_resource" "deploy" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update",
-      "sudo apt-get install -y docker.io docker-compose",
-      "sudo systemctl start docker",
-      "sudo systemctl enable docker",
       "cd /home/azureuser",
       "docker-compose up -d"
     ]
