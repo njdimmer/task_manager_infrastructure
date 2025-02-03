@@ -5,9 +5,8 @@ services:
     build: .
     container_name: taskmanager
     restart: always
-    environment:
-      FLASK_APP: app/__init__.py
-      DATABASE_URL: postgresql://user:password@db/taskmanager_db
+    env_file:
+      - fileName: .env.task_manager
     expose:
       - "8080"
     depends_on:
@@ -28,10 +27,6 @@ services:
   db:
     image: postgres:13
     container_name: taskmanager_db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: taskmanager_db
     ports:
       - "5432:5432"
     volumes:
