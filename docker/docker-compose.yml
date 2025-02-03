@@ -6,7 +6,7 @@ services:
     container_name: taskmanager
     restart: always
     env_file:
-      - fileName: .env.task_manager
+      - .env.task_manager
     expose:
       - "8080"
     depends_on:
