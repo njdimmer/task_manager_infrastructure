@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   taskmanager:
-    build: .
+    image: taskmanagerregistry.azurecr.io/taskmanager:latest
     container_name: taskmanager
     restart: always
     env_file:
