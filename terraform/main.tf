@@ -7,8 +7,9 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
-data "azurerm_resource_group" "rg" {
-  name = "task_manager"
+resource "azurerm_resource_group" "rg" {
+  name     = "task_manager"
+  location = "East US"
 }
 
 resource "azurerm_virtual_network" "vnet" {
