@@ -160,6 +160,18 @@ resource "null_resource" "deploy" {
     }
   }
 
+  provisioner "file" {
+    source      = "../docker/nginx"
+    destination = "/home/azureuser/nginx"
+
+    connection {
+      type        = "ssh"
+      user        = "azureuser"
+      private_key = var.ssh_private_key
+      host        = azurerm_public_ip.public_ip.ip_address
+    }
+  }
+
   provisioner "remote-exec" {
     inline = [
       "az acr login --name taskmanagerregistry --username ${var.acr_username} --password ${var.acr_password}",
