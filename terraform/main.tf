@@ -162,6 +162,8 @@ resource "null_resource" "deploy" {
 
   provisioner "remote-exec" {
     inline = [
+      "az acr login --name taskmanagerregistry --username ${var.acr_username} --password ${var.acr_password}",
+      "docker login taskmanagerregistry.azurecr.io --username ${var.acr_username} --password ${var.acr_password}",
       "cd /home/azureuser",
       "docker-compose up -d"
     ]

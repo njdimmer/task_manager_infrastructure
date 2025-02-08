@@ -36,3 +36,10 @@ variable "tenant_id" {
   type = string
 }
 
+variable "acr_username" {
+  type = string
+}
+
+variable "acr_password" {
+  type = string
+}
